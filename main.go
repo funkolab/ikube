@@ -9,11 +9,15 @@ import (
 
 func parseFlags() (string, appConfig) {
 	var config appConfig
+	flag.CommandLine.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage:\n  ikube [flags] [filter]\n\n")
+		flag.PrintDefaults()
+	}
 	verbose := flag.Bool("v", false, "verbose mode")
 	temp := flag.Bool("l", false, "load kubeconfig in temporary shell")
 	delete := flag.Bool("d", false, "delete kubeconfig(s)")
 	flag.Parse()
-	
+
 	config.verbose = *verbose
 	config.temp = *temp
 	config.delete = *delete
