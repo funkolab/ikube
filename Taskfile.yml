@@ -1,0 +1,49 @@
+version: "3"
+
+vars:
+  BINARY_NAME: ikube
+  VERSION:
+    sh: git describe --tags --always --dirty || echo "dev"
+
+tasks:
+  default:
+    cmds:
+      - task: build
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - rm -f {{.BINARY_NAME}}
+
+  build:
+    desc: Build the binary
+    deps: [clean]
+    cmds:
+      - go build -ldflags="-X main.version={{.VERSION}}" -o {{.BINARY_NAME}}
+    sources:
+      - "*.go"
+    generates:
+      - "{{.BINARY_NAME}}"
+
+  install:
+    desc: Install the binary to $GOPATH/bin
+    deps: [build]
+    cmds:
+      - cp {{.BINARY_NAME}} $GOPATH/bin/
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test -v ./...
+
+  lint:
+    desc: Run linter
+    cmds:
+      - golangci-lint run
+
+  all:
+    desc: Run all tasks (lint, test, build)
+    cmds:
+      - task: lint
+      - task: test
+      - task: build
