@@ -29,7 +29,7 @@ tasks:
     desc: Install the binary to $GOPATH/bin
     deps: [build]
     cmds:
-      - cp {{.BINARY_NAME}} $GOPATH/bin/
+      - go install
 
   test:
     desc: Run tests
