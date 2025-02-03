@@ -1,0 +1,28 @@
+name: Daily Trivy Scan
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs daily at midnight
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy scan
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          scan-type: fs
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      # - name: Upload Trivy report
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     sarif_file: "trivy-results.sarif"

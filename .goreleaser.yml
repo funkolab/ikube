@@ -1,0 +1,43 @@
+version: 2
+
+before:
+  hooks:
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+archives:
+  - builds:
+      - ikube
+    name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    wrap_in_directory: false
+    formats: [tar.gz]
+
+# Homebrew
+brews:
+  - name: ikube
+    repository:
+      owner: funkolab
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.FUNKOLAB_BOT_PAT }}"
+    commit_author:
+      name: funkolab
+      email: reg-github@geo6.net
+    directory: Formula
+    homepage: https://github.com/funkolab/ikube 
+    description: CLI tools to manage your kubeconfig file using infisical !
+    test: |
+      system "ikube -h"
