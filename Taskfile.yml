@@ -36,6 +36,17 @@ tasks:
     cmds:
       - go test -v ./...
 
+  vet:
+    desc: Run go vet
+    cmds:
+      - go vet ./...
+
+  check:
+    desc: Run staticcheck
+    cmds:
+      - go install honnef.co/go/tools/cmd/staticcheck@latest
+      - staticcheck ./...
+
   lint:
     desc: Run linter
     cmds:
