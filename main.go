@@ -7,16 +7,29 @@ import (
 	"strings"
 )
 
+var version = "0.0.0"
+
 func parseFlags() (string, appConfig) {
 	var config appConfig
+	flag.CommandLine.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage:\n  ikube [flags] [filter]\n\n")
+		flag.PrintDefaults()
+	}
 	verbose := flag.Bool("v", false, "verbose mode")
 	temp := flag.Bool("l", false, "load kubeconfig in temporary shell")
 	delete := flag.Bool("d", false, "delete kubeconfig(s)")
+	showVersion := flag.Bool("version", false, "display version")
 	flag.Parse()
-	
+
 	config.verbose = *verbose
 	config.temp = *temp
 	config.delete = *delete
+
+	// Check if version flag is set
+	if *showVersion {
+		fmt.Printf("ikube version %s\n", version)
+		os.Exit(0)
+	}
 
 	// Get filter from remaining args
 	var filter string

@@ -29,12 +29,23 @@ tasks:
     desc: Install the binary to $GOPATH/bin
     deps: [build]
     cmds:
-      - cp {{.BINARY_NAME}} $GOPATH/bin/
+      - go install
 
   test:
     desc: Run tests
     cmds:
       - go test -v ./...
+
+  vet:
+    desc: Run go vet
+    cmds:
+      - go vet ./...
+
+  check:
+    desc: Run staticcheck
+    cmds:
+      - go install honnef.co/go/tools/cmd/staticcheck@latest
+      - staticcheck ./...
 
   lint:
     desc: Run linter

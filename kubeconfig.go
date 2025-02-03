@@ -294,7 +294,7 @@ func handleListSecrets(client infisical.InfisicalClientInterface, projectID stri
 		defer os.Remove(tmpPath)
 
 		// Launch shell with temporary kubeconfig
-		err = launchShellWithKubeconfig(tmpPath, config)
+		err = launchShellWithKubeconfig(tmpPath, selectedSecret.SecretKey, config)
 		if err != nil {
 			if config.verbose {
 				fmt.Printf("Error launching shell: %v\n", err)

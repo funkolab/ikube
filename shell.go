@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func launchShellWithKubeconfig(kubeconfigPath string, config appConfig) error {
+func launchShellWithKubeconfig(kubeconfigPath string, clusterName string, config appConfig) error {
 	shell := os.Getenv("SHELL")
 	if shell == "" {
 		shell = "/bin/sh"
@@ -23,7 +23,8 @@ func launchShellWithKubeconfig(kubeconfigPath string, config appConfig) error {
 	cmd.Env = env
 
 	// Print information about the temporary session
-	fmt.Printf("\nStarting temporary shell with KUBECONFIG=%s\n", kubeconfigPath)
+	fmt.Printf("\nStarting temporary shell for cluster: %s\n", clusterName)
+	fmt.Printf("KUBECONFIG=%s\n", kubeconfigPath)
 	fmt.Println("Exit the shell to clean up the temporary kubeconfig")
 	fmt.Println()
 
