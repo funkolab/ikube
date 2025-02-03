@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var version = "0.0.0"
+var version = "0.1.1"
 
 func parseFlags() (string, appConfig) {
 	var config appConfig
