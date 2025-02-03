@@ -12,21 +12,34 @@
 
 ## Installation
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/funkolab/ikube.git
-    cd ikube
-    ```
+There are several installation options:
 
-2. Build the binary:
-    ```sh
-    task build
-    ```
+- As Homebrew or Linuxbrew package
+- Manual installation
 
-3. Install the binary to `$GOPATH/bin`:
-    ```sh
-    task install
-    ```
+After installing, the tool will be available as `ikube`.
+
+### Homebrew Package
+
+You can install with [Homebrew](https://brew.sh) for macOS or [LinuxBrew](https://docs.brew.sh/Homebrew-on-Linux) for Linux
+
+```sh
+brew install funkolab/tap/ikube
+```
+
+Keep up-to-date with `brew upgrade ikube` (or `brew upgrade` to upgrade everything)
+
+### Manual
+
+- Download your corresponding [release](https://github.com/funkolab/ikube/releases)
+- Install the binary somewhere in your PATH (`/usr/local/bin` for example)
+- use it with `ikube`
+
+***MacOS X notes for security error***
+
+ Depending on your OS settings, when installing the binary manually you must run the following command:
+ `xattr -r -d com.apple.quarantine /usr/local/bin/ikube`
+
 
 ## Usage
 
@@ -80,6 +93,25 @@ This project uses [Task](https://taskfile.dev) for task management. The availabl
 - `task test`: Run tests.
 - `task lint`: Run linter.
 - `task all`: Run all tasks (lint, test, build).
+
+### Building From Source
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/funkolab/ikube.git
+    cd ikube
+    ```
+
+2. Build the binary:
+    ```sh
+    task build
+    ```
+
+3. Install the binary to `$GOPATH/bin`:
+    ```sh
+    task install
+    ```
+
 
 ### Running Tests
 
