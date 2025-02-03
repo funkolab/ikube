@@ -8,6 +8,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    group:
-      group-name: "all-gomod-updates"
-      group-rule: "all"
+    groups:
+      all-go-mod-patch-and-minor:
+        patterns: [ "*" ]
+        update-types: [ "patch", "minor" ]
