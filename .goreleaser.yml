@@ -1,3 +1,5 @@
+version: 2
+
 before:
   hooks:
     - go mod download
@@ -27,7 +29,7 @@ archives:
 # Homebrew
 brews:
   - name: ikube
-    tap:
+    repository:
       owner: funkolab
       name: homebrew-tap
       branch: main
@@ -35,7 +37,7 @@ brews:
     commit_author:
       name: funkolab
       email: reg-github@geo6.net
-    folder: Formula
+    directory: Formula
     homepage: https://github.com/funkolab/ikube 
     description: CLI tools to manage your kubeconfig file using infisical !
     test: |
