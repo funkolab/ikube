@@ -6,7 +6,7 @@ require (
 	github.com/infisical/go-sdk v0.5.0
 	github.com/ktr0731/go-fuzzyfinder v0.8.0
 	github.com/zalando/go-keyring v0.2.6
-	k8s.io/client-go v0.32.2
+	k8s.io/client-go v0.32.3
 )
 
 require (
@@ -78,7 +78,7 @@ require (
 	google.golang.org/grpc v1.64.1 // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
-	k8s.io/apimachinery v0.32.2 // indirect
+	k8s.io/apimachinery v0.32.3 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/utils v0.0.0-20241104100929-3ea5e8cea738 // indirect
 	sigs.k8s.io/json v0.0.0-20241010143419-9aa6b5e7a4b3 // indirect
