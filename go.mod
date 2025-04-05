@@ -3,7 +3,7 @@ module github.com/funkolab/ikube
 go 1.24
 
 require (
-	github.com/infisical/go-sdk v0.5.0
+	github.com/infisical/go-sdk v0.5.1
 	github.com/ktr0731/go-fuzzyfinder v0.8.0
 	github.com/zalando/go-keyring v0.2.6
 	k8s.io/client-go v0.32.3
