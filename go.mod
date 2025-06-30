@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.24.3
 
 require (
-	github.com/infisical/go-sdk v0.5.96
+	github.com/infisical/go-sdk v0.5.97
 	github.com/ktr0731/go-fuzzyfinder v0.9.0
 	github.com/zalando/go-keyring v0.2.6
 	k8s.io/client-go v0.33.2
