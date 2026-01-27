@@ -132,7 +132,7 @@ func authenticateInfisical(config appConfig) (infisical.InfisicalClientInterface
 		}
 
 		client = infisical.NewInfisicalClient(context.Background(), infisical.Config{
-			SiteUrl:          "https://secrets.nxlab.fr",
+			SiteUrl:          fmt.Sprintf("https://%s", config.infisicalServer),
 			AutoTokenRefresh: true,
 		})
 
