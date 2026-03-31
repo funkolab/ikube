@@ -12,7 +12,7 @@ import (
 
 func handleDeleteKubeconfigs(client infisical.InfisicalClientInterface, projectID string, filter string, config appConfig) {
 	// Get all secrets
-	secrets, err := client.Secrets().List(infisical.ListSecretsOptions{
+	result, err := client.Secrets().ListSecrets(infisical.ListSecretsOptions{
 		ProjectID:          projectID,
 		Environment:        "config",
 		SecretPath:         "/",
@@ -26,6 +26,7 @@ func handleDeleteKubeconfigs(client infisical.InfisicalClientInterface, projectI
 		}
 		os.Exit(1)
 	}
+	secrets := result.Secrets
 
 	if len(secrets) == 0 {
 		fmt.Println("No kubeconfigs found")
