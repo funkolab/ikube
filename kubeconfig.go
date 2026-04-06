@@ -190,7 +190,29 @@ func handleStoreKubeconfig(client infisical.InfisicalClientInterface, projectID 
 		fmt.Printf("Successfully stored kubeconfig for cluster: %s\n", clusterName)
 	}
 
-	if !config.noSet {
+	if config.temp {
+		// Create temporary kubeconfig file and launch shell
+		tmpPath, err := createTempKubeconfig([]byte(kubeconfig))
+		if err != nil {
+			if config.verbose {
+				fmt.Printf("Error creating temporary kubeconfig: %v\n", err)
+			} else {
+				fmt.Println("Error creating temporary kubeconfig")
+			}
+			os.Exit(1)
+		}
+		defer os.Remove(tmpPath)
+
+		err = launchShellWithKubeconfig(tmpPath, clusterName, config)
+		if err != nil {
+			if config.verbose {
+				fmt.Printf("Error launching shell: %v\n", err)
+			} else {
+				fmt.Println("Error launching shell")
+			}
+			os.Exit(1)
+		}
+	} else if !config.noSet {
 		if err := setKubeconfig([]byte(kubeconfig), clusterName, config); err != nil {
 			os.Exit(1)
 		}
