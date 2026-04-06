@@ -4,6 +4,7 @@ type appConfig struct {
 	verbose         bool
 	temp            bool
 	delete          bool
+	noSet           bool
 	infisicalServer string
 }
 
