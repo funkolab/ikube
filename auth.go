@@ -89,14 +89,14 @@ func promptForCredentials() (string, string, bool, error) {
 	return clientID, clientSecret, false, nil
 }
 
-func authenticateInfisical(config appConfig) (infisical.InfisicalClientInterface, error) {
+func authenticateInfisical(ctx context.Context, config appConfig) (infisical.InfisicalClientInterface, error) {
 	// First attempt with stored or env credentials
 	clientID, clientSecret, isFromKeyring, err := getCredentials(false)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get credentials: %v", err)
 	}
 
-	client := infisical.NewInfisicalClient(context.Background(), infisical.Config{
+	client := infisical.NewInfisicalClient(ctx, infisical.Config{
 		SiteUrl:          fmt.Sprintf("https://%s", config.infisicalServer),
 		AutoTokenRefresh: true,
 	})
@@ -131,7 +131,7 @@ func authenticateInfisical(config appConfig) (infisical.InfisicalClientInterface
 			return nil, fmt.Errorf("failed to get credentials: %v", err)
 		}
 
-		client = infisical.NewInfisicalClient(context.Background(), infisical.Config{
+		client = infisical.NewInfisicalClient(ctx, infisical.Config{
 			SiteUrl:          fmt.Sprintf("https://%s", config.infisicalServer),
 			AutoTokenRefresh: true,
 		})

@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 var version = "dev"
@@ -50,6 +53,10 @@ func main() {
 	// Parse command line flags
 	filter, config := parseFlags()
 
+	// Create a context that is cancelled on SIGINT/SIGTERM
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
 	// Get Infisical server from environment variable
 	config.infisicalServer = os.Getenv("INFISICAL_SERVER")
 	if config.infisicalServer == "" {
@@ -64,7 +71,7 @@ func main() {
 	}
 
 	// Authenticate with Infisical
-	client, err := authenticateInfisical(config)
+	client, err := authenticateInfisical(ctx, config)
 	if err != nil {
 		if config.verbose {
 			fmt.Printf("Failed to authenticate: %v\n", err)
