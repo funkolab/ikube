@@ -257,9 +257,14 @@ func handleListSecrets(client infisical.InfisicalClientInterface, projectID stri
 				clusterName := secrets[i].SecretKey
 				cluster := kubeCfg.Clusters[clusterName]
 
+				server := ""
+				if cluster != nil {
+					server = cluster.Server
+				}
+
 				return fmt.Sprintf("Cluster: %s\nServer: %s\nComment: %s",
 					clusterName,
-					cluster.Server,
+					server,
 					secrets[i].SecretComment)
 			}),
 		)
