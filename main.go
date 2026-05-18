@@ -27,12 +27,14 @@ func parseFlags() (string, appConfig) {
 	verbose := flag.Bool("v", false, "verbose mode")
 	temp := flag.Bool("l", false, "load kubeconfig in temporary shell")
 	delete := flag.Bool("d", false, "delete kubeconfig(s)")
+	noSet := flag.Bool("no-set", false, "disable automatic kubeconfig update when reading from stdin")
 	showVersion := flag.Bool("version", false, "display version")
 	flag.Parse()
 
 	config.verbose = *verbose
 	config.temp = *temp
 	config.delete = *delete
+	config.noSet = *noSet
 
 	// Check if version flag is set
 	if *showVersion {

@@ -189,6 +189,71 @@ func handleStoreKubeconfig(client infisical.InfisicalClientInterface, projectID 
 		}
 		fmt.Printf("Successfully stored kubeconfig for cluster: %s\n", clusterName)
 	}
+
+	if config.temp {
+		// Create temporary kubeconfig file and launch shell
+		tmpPath, err := createTempKubeconfig([]byte(kubeconfig))
+		if err != nil {
+			if config.verbose {
+				fmt.Printf("Error creating temporary kubeconfig: %v\n", err)
+			} else {
+				fmt.Println("Error creating temporary kubeconfig")
+			}
+			os.Exit(1)
+		}
+		defer os.Remove(tmpPath)
+
+		err = launchShellWithKubeconfig(tmpPath, clusterName, config)
+		if err != nil {
+			if config.verbose {
+				fmt.Printf("Error launching shell: %v\n", err)
+			} else {
+				fmt.Println("Error launching shell")
+			}
+			os.Exit(1)
+		}
+	} else if !config.noSet {
+		if err := setKubeconfig([]byte(kubeconfig), clusterName, config); err != nil {
+			os.Exit(1)
+		}
+	}
+}
+
+// setKubeconfig writes the provided kubeconfig data to ~/.kube/config,
+// creating the directory if necessary. It prints the cluster name on success.
+func setKubeconfig(data []byte, clusterName string, config appConfig) error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		if config.verbose {
+			fmt.Printf("Error getting home directory: %v\n", err)
+		} else {
+			fmt.Println("Error getting home directory")
+		}
+		return err
+	}
+
+	kubeDir := filepath.Join(homeDir, ".kube")
+	if err := os.MkdirAll(kubeDir, 0755); err != nil {
+		if config.verbose {
+			fmt.Printf("Error creating .kube directory: %v\n", err)
+		} else {
+			fmt.Println("Error creating .kube directory")
+		}
+		return err
+	}
+
+	kubeconfigPath := filepath.Join(kubeDir, "config")
+	if err := os.WriteFile(kubeconfigPath, data, 0600); err != nil {
+		if config.verbose {
+			fmt.Printf("Error writing kubeconfig: %v\n", err)
+		} else {
+			fmt.Println("Error writing kubeconfig")
+		}
+		return err
+	}
+
+	fmt.Printf("Successfully configured kubeconfig for cluster: %s\n", clusterName)
+	return nil
 }
 
 func handleListSecrets(client infisical.InfisicalClientInterface, projectID string, filter string, config appConfig) {
@@ -313,38 +378,8 @@ func handleListSecrets(client infisical.InfisicalClientInterface, projectID stri
 		return
 	}
 
-	// Get user's home directory
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		if config.verbose {
-			fmt.Printf("Error getting home directory: %v\n", err)
-		} else {
-			fmt.Println("Error getting home directory")
-		}
-		os.Exit(1)
-	}
-
-	// Create .kube directory if it doesn't exist
-	kubeDir := filepath.Join(homeDir, ".kube")
-	if err := os.MkdirAll(kubeDir, 0755); err != nil {
-		if config.verbose {
-			fmt.Printf("Error creating .kube directory: %v\n", err)
-		} else {
-			fmt.Println("Error creating .kube directory")
-		}
-		os.Exit(1)
-	}
-
 	// Write kubeconfig to file
-	kubeconfigPath := filepath.Join(kubeDir, "config")
-	if err := os.WriteFile(kubeconfigPath, []byte(selectedSecret.SecretValue), 0600); err != nil {
-		if config.verbose {
-			fmt.Printf("Error writing kubeconfig: %v\n", err)
-		} else {
-			fmt.Println("Error writing kubeconfig")
-		}
+	if err := setKubeconfig([]byte(selectedSecret.SecretValue), selectedSecret.SecretKey, config); err != nil {
 		os.Exit(1)
 	}
-
-	fmt.Printf("Successfully configured kubeconfig for cluster: %s\n", selectedSecret.SecretKey)
 }
