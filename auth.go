@@ -104,9 +104,10 @@ func authenticateInfisical(ctx context.Context, config appConfig) (infisical.Inf
 		return nil, fmt.Errorf("failed to get credentials: %v", err)
 	}
 
+	autoRefresh := true
 	client := infisical.NewInfisicalClient(ctx, infisical.Config{
 		SiteUrl:          fmt.Sprintf("https://%s", config.infisicalServer),
-		AutoTokenRefresh: true,
+		AutoTokenRefresh: &autoRefresh,
 	})
 
 	_, err = client.Auth().UniversalAuthLogin(clientID, clientSecret)
@@ -141,7 +142,7 @@ func authenticateInfisical(ctx context.Context, config appConfig) (infisical.Inf
 
 		client = infisical.NewInfisicalClient(ctx, infisical.Config{
 			SiteUrl:          fmt.Sprintf("https://%s", config.infisicalServer),
-			AutoTokenRefresh: true,
+			AutoTokenRefresh: &autoRefresh,
 		})
 
 		_, err = client.Auth().UniversalAuthLogin(clientID, clientSecret)
