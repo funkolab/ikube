@@ -106,10 +106,10 @@ func handleDeleteKubeconfigs(client infisical.InfisicalClientInterface, projectI
 		fmt.Printf("- %s\n", secrets[idx].SecretKey)
 	}
 	fmt.Print("\nAre you sure you want to delete these kubeconfigs? [y/N]: ")
-	
+
 	var confirmation string
-	fmt.Scanln(&confirmation)
-	if strings.ToLower(confirmation) != "y" {
+	// Treat read errors (including empty input) as a refusal
+	if _, err := fmt.Scanln(&confirmation); err != nil || strings.ToLower(confirmation) != "y" {
 		fmt.Println("Deletion cancelled")
 		return
 	}

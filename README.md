@@ -84,15 +84,25 @@ ikube -l
 
 ## Development
 
-### Taskfile
+### mise
 
-This project uses [Task](https://taskfile.dev) for task management. The available tasks are defined in the `Taskfile.yml`.
+This project uses [mise](https://mise.jdx.dev) to manage tools (Go, golangci-lint, staticcheck) and tasks. Everything is defined in `mise.toml`.
 
-- `task build`: Build the binary.
-- `task install`: Install the binary to `$GOPATH/bin`.
-- `task test`: Run tests.
-- `task lint`: Run linter.
-- `task all`: Run all tasks (lint, test, build).
+Install the required tools with:
+```sh
+mise install
+```
+
+- `mise run build`: Build the binary.
+- `mise run install`: Install the binary to `$GOPATH/bin`.
+- `mise run test`: Run tests.
+- `mise run vet`: Run go vet.
+- `mise run check`: Run staticcheck.
+- `mise run lint`: Run linter.
+- `mise run clean`: Clean build artifacts.
+- `mise run all`: Run all tasks (lint, test, build).
+
+Use `mise tasks` to list all available tasks.
 
 ### Building From Source
 
@@ -104,12 +114,12 @@ This project uses [Task](https://taskfile.dev) for task management. The availabl
 
 2. Build the binary:
     ```sh
-    task build
+    mise run build
     ```
 
 3. Install the binary to `$GOPATH/bin`:
     ```sh
-    task install
+    mise run install
     ```
 
 
@@ -117,14 +127,14 @@ This project uses [Task](https://taskfile.dev) for task management. The availabl
 
 To run the tests, use:
 ```sh
-task test
+mise run test
 ```
 
 ### Linting
 
 To run the linter, use:
 ```sh
-task lint
+mise run lint
 ```
 
 ## License

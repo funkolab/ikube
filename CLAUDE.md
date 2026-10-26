@@ -1,14 +1,14 @@
 # ikube Development Guide
 
 ## Build/Test Commands
-- Build: `task build`
-- Install: `task install`
-- Run tests: `task test`
+- Build: `mise run build`
+- Install: `mise run install`
+- Run tests: `mise run test`
 - Run specific test: `go test -v ./... -run TestFunctionName`
-- Lint: `task lint` (uses golangci-lint)
-- Vet: `task vet`
-- Static check: `task check`
-- Run all (lint, test, build): `task all`
+- Lint: `mise run lint` (uses golangci-lint)
+- Vet: `mise run vet`
+- Static check: `mise run check`
+- Run all (lint, test, build): `mise run all`
 
 ## Code Style Guidelines
 - **Error handling**: Wrap errors with context using `fmt.Errorf("message: %v", err)`
