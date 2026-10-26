@@ -1,0 +1,43 @@
+[tools]
+go = "1.26"
+golangci-lint = "latest"
+staticcheck = "latest"
+
+[tasks.default]
+description = "Build the binary"
+depends = ["build"]
+
+[tasks.clean]
+description = "Clean build artifacts"
+run = "rm -f ikube"
+
+[tasks.build]
+description = "Build the binary"
+sources = ["*.go", "go.mod", "go.sum"]
+outputs = ["ikube"]
+run = 'go build -ldflags="-X main.version=$(git describe --tags --always --dirty 2>/dev/null || echo dev)" -o ikube'
+
+[tasks.install]
+description = "Install the binary to $GOPATH/bin"
+depends = ["build"]
+run = "go install"
+
+[tasks.test]
+description = "Run tests"
+run = "go test -v ./..."
+
+[tasks.vet]
+description = "Run go vet"
+run = "go vet ./..."
+
+[tasks.check]
+description = "Run staticcheck"
+run = "staticcheck ./..."
+
+[tasks.lint]
+description = "Run linter"
+run = "golangci-lint run"
+
+[tasks.all]
+description = "Run all tasks (lint, test, build)"
+run = [{ task = "lint" }, { task = "test" }, { task = "build" }]

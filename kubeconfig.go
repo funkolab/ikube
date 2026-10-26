@@ -43,7 +43,7 @@ func validateKubeconfig(config *api.Config) error {
 	clusterName := context.Cluster
 	cluster, exists := config.Clusters[clusterName]
 	if !exists {
-		return fmt.Errorf("cluster '%s' referenced by context '%s' not found in clusters", 
+		return fmt.Errorf("cluster '%s' referenced by context '%s' not found in clusters",
 			clusterName, config.CurrentContext)
 	}
 
@@ -59,13 +59,13 @@ func validateKubeconfig(config *api.Config) error {
 
 	authInfo, exists := config.AuthInfos[context.AuthInfo]
 	if !exists {
-		return fmt.Errorf("user '%s' referenced by context '%s' not found in users", 
+		return fmt.Errorf("user '%s' referenced by context '%s' not found in users",
 			context.AuthInfo, config.CurrentContext)
 	}
 
 	// Check if at least one authentication method is specified
-	hasAuth := authInfo.Token != "" || 
-		authInfo.ClientCertificate != "" || 
+	hasAuth := authInfo.Token != "" ||
+		authInfo.ClientCertificate != "" ||
 		authInfo.ClientCertificateData != nil ||
 		authInfo.ClientKey != "" ||
 		authInfo.ClientKeyData != nil ||
@@ -296,13 +296,15 @@ func handleListSecrets(client infisical.InfisicalClientInterface, projectID stri
 			}
 			os.Exit(1)
 		}
-		
+
 		// Ensure cleanup of temporary file
-		defer os.Remove(tmpPath)
+		defer func() { _ = os.Remove(tmpPath) }()
 
 		// Launch shell with temporary kubeconfig
 		err = launchShellWithKubeconfig(tmpPath, selectedSecret.SecretKey, config)
 		if err != nil {
+			// os.Exit skips deferred calls, so clean up explicitly
+			_ = os.Remove(tmpPath)
 			if config.verbose {
 				fmt.Printf("Error launching shell: %v\n", err)
 			} else {

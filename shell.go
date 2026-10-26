@@ -47,12 +47,17 @@ func createTempKubeconfig(content []byte) (string, error) {
 		return "", fmt.Errorf("failed to create temporary file: %v", err)
 	}
 
-	defer tmpfile.Close()
-
 	// Write content directly to the open file descriptor to avoid TOCTOU
 	if _, err := tmpfile.Write(content); err != nil {
-		os.Remove(tmpfile.Name())
+		_ = tmpfile.Close()
+		_ = os.Remove(tmpfile.Name())
 		return "", fmt.Errorf("failed to write temporary file: %v", err)
+	}
+
+	// Close explicitly: a failed close can mean the data was not fully written
+	if err := tmpfile.Close(); err != nil {
+		_ = os.Remove(tmpfile.Name())
+		return "", fmt.Errorf("failed to close temporary file: %v", err)
 	}
 
 	return tmpfile.Name(), nil

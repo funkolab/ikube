@@ -15,13 +15,13 @@ var version = "dev"
 func parseFlags() (string, appConfig) {
 	var config appConfig
 	flag.CommandLine.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage:\n  ikube [flags] [filter]\n\n")
+		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "Usage:\n  ikube [flags] [filter]\n\n")
 		flag.VisitAll(func(f *flag.Flag) {
 			prefix := "-"
 			if len(f.Name) > 1 {
 				prefix = "--"
 			}
-			fmt.Fprintf(flag.CommandLine.Output(), "  %s%s\t%s\n", prefix, f.Name, f.Usage)
+			_, _ = fmt.Fprintf(flag.CommandLine.Output(), "  %s%s\t%s\n", prefix, f.Name, f.Usage)
 		})
 	}
 	verbose := flag.Bool("v", false, "verbose mode")
